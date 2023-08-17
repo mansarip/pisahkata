@@ -11,6 +11,9 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  Select,
+  Tooltip,
+  Link,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -20,10 +23,12 @@ import { BsBackspaceReverse } from "react-icons/bs";
 import { GrClear } from "react-icons/gr";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { RxColumnSpacing, RxReset } from "react-icons/rx";
+import { TbMouse, TbMouseOff } from "react-icons/tb";
 import iOS from "is-ios";
 import Div100vh from "react-div-100vh";
 
-const AMIRI_FONT = "hafs";
+const HAFS_FONT = "hafs";
+const AMIRI_FONT = "amiri";
 const DEFAULT_SLIDER_SIZE_VALUE = 59;
 
 const letters = [
@@ -86,6 +91,8 @@ export default function App() {
   const [textSpacing, setTextSpacing] = useState("normal");
   const [selectedLetterIndex, setSelectedLetterIndex] = useState(null);
   const [spacingValue, setSpacingValue] = useState(40);
+  const [isEnabledHover, setIsEnabledHover] = useState(true);
+  const [currentFont, setCurrentFont] = useState(HAFS_FONT);
 
   function appendLetter(letter) {
     setStageText(stageText + letter);
@@ -141,15 +148,23 @@ export default function App() {
     mainText = (
       <Icon as={PiBookOpenTextDuotone} boxSize="250px" opacity={0.2} />
     );
-  } else if (iOS) {
+  } else if (iOS || !isEnabledHover) {
     mainText = (
-      <MainTextWrapper fontSize={stageTextSize} letterSpacing={textSpacing}>
+      <MainTextWrapper
+        fontSize={stageTextSize}
+        letterSpacing={textSpacing}
+        currentFont={currentFont}
+      >
         {stageText}
       </MainTextWrapper>
     );
   } else {
     mainText = (
-      <MainTextWrapper fontSize={stageTextSize} letterSpacing={textSpacing}>
+      <MainTextWrapper
+        fontSize={stageTextSize}
+        letterSpacing={textSpacing}
+        currentFont={currentFont}
+      >
         {stageText.split("").map((char, index) => {
           let fontSize = char === " " ? "0.4em" : "unset";
 
@@ -184,6 +199,18 @@ export default function App() {
         width={["unset", "unset", "unset", "1200px"]}
       >
         <HStack py="10px" px="20px">
+          <Tooltip label="Font family">
+            <Select
+              w="120px"
+              size="lg"
+              borderColor="gray.300"
+              value={currentFont}
+              onChange={(e) => setCurrentFont(e.target.value)}
+            >
+              <option value={HAFS_FONT}>Hafs</option>
+              <option value={AMIRI_FONT}>Amiri</option>
+            </Select>
+          </Tooltip>
           <SliderZoom
             onChange={(value) => {
               let emValue = percentageToEm(value) + "em";
@@ -202,6 +229,27 @@ export default function App() {
               setSpacingValue(40);
             }}
           />
+          {isEnabledHover ? (
+            <Tooltip label="Character hover: Enabled">
+              <Button
+                size="lg"
+                fontSize="1.5em"
+                onClick={() => setIsEnabledHover(false)}
+              >
+                <Icon as={TbMouse} />
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip label="Character hover: Disabled">
+              <Button
+                size="lg"
+                fontSize="1.5em"
+                onClick={() => setIsEnabledHover(true)}
+              >
+                <Icon as={TbMouseOff} />
+              </Button>
+            </Tooltip>
+          )}
         </HStack>
 
         <Flex
@@ -271,6 +319,10 @@ export default function App() {
               />
             ))}
           </Grid>
+          <Text fontSize="0.8em" pt="10px" color="gray.400" textAlign="right">
+            Created by mansarip (
+            <Link target="_blank" href="https://github.com/mansarip/pisahkata">Github</Link>)
+          </Text>
         </Flex>
       </Flex>
     </Div100vh>
@@ -281,11 +333,12 @@ function MainTextWrapper({
   children,
   fontSize = "15em",
   letterSpacing = "normal",
+  currentFont,
 }) {
   return (
     <Text
       fontSize={fontSize}
-      fontFamily={AMIRI_FONT}
+      fontFamily={currentFont}
       direction="rtl"
       userSelect="none"
       key={new Date().getTime()}
@@ -427,9 +480,11 @@ function SliderSpacing({ value, onChange, onClickReset }) {
           border="2px solid"
         />
       </Slider>
-      <Button size="lg" fontSize="1.5em" onClick={onClickReset}>
-        <Icon as={RxReset} />
-      </Button>
+      <Tooltip label="Reset spacing">
+        <Button size="lg" fontSize="1.5em" onClick={onClickReset}>
+          <Icon as={RxReset} />
+        </Button>
+      </Tooltip>
     </HStack>
   );
 }
