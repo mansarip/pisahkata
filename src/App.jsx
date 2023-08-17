@@ -13,6 +13,7 @@ import {
   SliderThumb,
   Select,
   Tooltip,
+  Link,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -198,6 +199,18 @@ export default function App() {
         width={["unset", "unset", "unset", "1200px"]}
       >
         <HStack py="10px" px="20px">
+          <Tooltip label="Font family">
+            <Select
+              w="120px"
+              size="lg"
+              borderColor="gray.300"
+              value={currentFont}
+              onChange={(e) => setCurrentFont(e.target.value)}
+            >
+              <option value={HAFS_FONT}>Hafs</option>
+              <option value={AMIRI_FONT}>Amiri</option>
+            </Select>
+          </Tooltip>
           <SliderZoom
             onChange={(value) => {
               let emValue = percentageToEm(value) + "em";
@@ -216,18 +229,6 @@ export default function App() {
               setSpacingValue(40);
             }}
           />
-          <Tooltip label="Font family">
-            <Select
-              w="120px"
-              size="lg"
-              borderColor="gray.300"
-              value={currentFont}
-              onChange={(e) => setCurrentFont(e.target.value)}
-            >
-              <option value={HAFS_FONT}>Hafs</option>
-              <option value={AMIRI_FONT}>Amiri</option>
-            </Select>
-          </Tooltip>
           {isEnabledHover ? (
             <Tooltip label="Character hover: Enabled">
               <Button
@@ -318,6 +319,10 @@ export default function App() {
               />
             ))}
           </Grid>
+          <Text fontSize="0.8em" pt="10px" color="gray.400" textAlign="right">
+            Created by mansarip (
+            <Link target="_blank" href="https://github.com/mansarip/pisahkata">Github</Link>)
+          </Text>
         </Flex>
       </Flex>
     </Div100vh>
