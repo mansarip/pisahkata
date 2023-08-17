@@ -1,13 +1,12 @@
 @font-face {
   font-family: "hafs";
   font-style: normal;
-  src: local("hafs"), url(hafs.woff2) format("woff2");
+  src: local("hafs"), url(/hafs.woff2) format("woff2");
 }
 
 @font-face {
   font-family: "Amiri";
-  src: url("Amiri-Bold.woff2") format("woff2"),
-    url("Amiri-Bold.woff") format("woff");
+  src: url("/Amiri-Bold.woff2") format("woff2");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -15,8 +14,7 @@
 
 @font-face {
   font-family: "Amiri";
-  src: url("Amiri-Italic.woff2") format("woff2"),
-    url("Amiri-Italic.woff") format("woff");
+  src: url("/Amiri-Italic.woff2") format("woff2");
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -24,8 +22,7 @@
 
 @font-face {
   font-family: "Amiri";
-  src: url("Amiri-BoldItalic.woff2") format("woff2"),
-    url("Amiri-BoldItalic.woff") format("woff");
+  src: url("/Amiri-BoldItalic.woff2") format("woff2");
   font-weight: bold;
   font-style: italic;
   font-display: swap;
@@ -33,8 +30,7 @@
 
 @font-face {
   font-family: "Amiri";
-  src: url("Amiri-Regular.woff2") format("woff2"),
-    url("Amiri-Regular.woff") format("woff");
+  src: url("/Amiri-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
