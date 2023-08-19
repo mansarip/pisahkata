@@ -16,6 +16,8 @@ Dengan visual yang jelas dan contoh-contoh yang mudah difahami, kanak-kanak akan
 
 Ini bukan sahaja memudahkan proses pembelajaran tetapi juga meningkatkan kefahaman dan minat pelajar dalam mempelajari Bahasa Arab.
 
+(Kalau perasan, ayat skema ni ChatGPT yang buatkan 🏃🏻‍♂️💨)
+
 ## Development
 
 ```
