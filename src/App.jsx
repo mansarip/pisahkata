@@ -30,6 +30,7 @@ import Div100vh from "react-div-100vh";
 const HAFS_FONT = "hafs";
 const AMIRI_FONT = "amiri";
 const DEFAULT_SLIDER_SIZE_VALUE = 59;
+const FONT_SIZE_SYMBOL_KEYBOARD = ["1.4em", "1.4em", "2.0em", "2.0em"];
 
 const letters = [
   "ا",
@@ -106,7 +107,11 @@ export default function App() {
   }
 
   function handleSelectLetter(index) {
-    setSelectedLetterIndex(index);
+    if (index === selectedLetterIndex) {
+      setSelectedLetterIndex(null);
+    } else {
+      setSelectedLetterIndex(index);
+    }
   }
 
   function insertBaris(char) {
@@ -198,7 +203,7 @@ export default function App() {
         margin={["unset", "unset", "unset", "0 auto"]}
         width={["unset", "unset", "unset", "1200px"]}
       >
-        <HStack py="10px" px="20px">
+        <HStack py="10px" px="20px" display={["none", "none", "flex", "flex"]}>
           <Tooltip label="Font family">
             <Select
               w="120px"
@@ -272,7 +277,12 @@ export default function App() {
 
         <Flex p="20px" flexDirection="column">
           <Grid
-            gridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+            gridTemplateColumns={[
+              "repeat(10, 1fr)",
+              "repeat(10, 1fr)",
+              "repeat(15, 1fr)",
+              "repeat(15, 1fr)",
+            ]}
             columnGap="5px"
             rowGap="5px"
             dir="rtl"
@@ -296,19 +306,19 @@ export default function App() {
               letter={GrClear}
               onClick={clearStage}
               isIcon
-              fontSize="2.0em"
+              fontSize={FONT_SIZE_SYMBOL_KEYBOARD}
             />
             <KeyboardButton
               letter={BsBackspaceReverse}
               onClick={pressBackspace}
               isIcon
-              fontSize="2.5em"
+              fontSize={FONT_SIZE_SYMBOL_KEYBOARD}
             />
             <KeyboardButton
               letter={LuSpace}
               onClick={() => appendLetter(" ")}
               isIcon
-              fontSize="2.5em"
+              fontSize={FONT_SIZE_SYMBOL_KEYBOARD}
               disableAnimation
             />
             {extraLetters.map((letter) => (
@@ -320,8 +330,11 @@ export default function App() {
             ))}
           </Grid>
           <Text fontSize="0.8em" pt="10px" color="gray.400" textAlign="right">
-            Created by mansarip (
-            <Link target="_blank" href="https://github.com/mansarip/pisahkata">Github</Link>)
+            Dicipta oleh mansarip (
+            <Link target="_blank" href="https://github.com/mansarip/pisahkata">
+              Github
+            </Link>
+            )
           </Text>
         </Flex>
       </Flex>
@@ -355,7 +368,7 @@ function KeyboardButton({
   letter,
   onClick,
   isIcon = false,
-  fontSize = "2.5em",
+  fontSize = ["1.4em", "2em", "2em", "2.5em"],
   disableAnimation = false,
   w,
   h,
@@ -369,7 +382,8 @@ function KeyboardButton({
       as={motion.button}
       key={letter}
       bg="gray.100"
-      borderRadius="10px"
+      borderRadius={["5px", "5px", "10px", "10px"]}
+      py={["2px", 0, 0, 0]}
       cursor="pointer"
       whileHover={{ scale: disableAnimation ? 1 : 1.15 }}
       whileTap={{ scale: disableAnimation ? 1 : 0.95 }}
@@ -384,7 +398,8 @@ function KeyboardButton({
         boxShadow: "2xl",
       }}
       onClick={onClick}
-      fontSize={["1em", "2em", "2em", fontSize]}
+      // fontSize={["1.4em", "2em", "2em", fontSize]}
+      fontSize={fontSize}
       fontWeight={fontWeight}
     >
       {isIcon ? (
@@ -397,12 +412,19 @@ function KeyboardButton({
 }
 
 function KeyboardBaris({ onLetterClick, onClear }) {
+  const wh = ["50px", "50px", "60px", "60px"];
+
   return (
     <Grid
       p="10px"
       position="absolute"
       top={0}
-      gridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
+      gridTemplateColumns={[
+        "repeat(6, 1fr)",
+        "repeat(6, 1fr)",
+        "repeat(9, 1fr)",
+        "repeat(9, 1fr)",
+      ]}
       columnGap="5px"
       rowGap="5px"
       dir="rtl"
@@ -410,8 +432,9 @@ function KeyboardBaris({ onLetterClick, onClear }) {
       {baris.map((letter) => (
         <KeyboardButton
           fontFamily="hafs"
-          w="60px"
-          h="60px"
+          fontSize={["3em"]}
+          w={wh}
+          h={wh}
           key={letter}
           letter={letter}
           onClick={(event) => {
@@ -428,8 +451,8 @@ function KeyboardBaris({ onLetterClick, onClear }) {
         }}
         isIcon
         fontSize="1.2em"
-        w="60px"
-        h="60px"
+        w={wh}
+        h={wh}
       />
     </Grid>
   );

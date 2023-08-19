@@ -35,3 +35,7 @@
   font-style: normal;
   font-display: swap;
 }
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
