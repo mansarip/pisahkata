@@ -11,7 +11,6 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
-  Select,
   Tooltip,
   Link,
 } from "@chakra-ui/react";
@@ -22,7 +21,8 @@ import { LuSpace } from "react-icons/lu";
 import { BsBackspaceReverse } from "react-icons/bs";
 import { GrClear } from "react-icons/gr";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
-import { RxColumnSpacing, RxReset } from "react-icons/rx";
+import { IoMdRefresh } from "react-icons/io";
+import { RxColumnSpacing, RxFontStyle, RxArrowLeft } from "react-icons/rx";
 import { TbMouse, TbMouseOff } from "react-icons/tb";
 import iOS from "is-ios";
 import Div100vh from "react-div-100vh";
@@ -31,6 +31,8 @@ const HAFS_FONT = "hafs";
 const AMIRI_FONT = "amiri";
 const DEFAULT_SLIDER_SIZE_VALUE = 59;
 const FONT_SIZE_SYMBOL_KEYBOARD = ["1.4em", "1.4em", "2.0em", "2.0em"];
+const MOBILE_SLIDER_ZOOM = "zoom";
+const MOBILE_SLIDER_SPACING = "spacing";
 
 const letters = [
   "ا",
@@ -94,6 +96,7 @@ export default function App() {
   const [spacingValue, setSpacingValue] = useState(40);
   const [isEnabledHover, setIsEnabledHover] = useState(true);
   const [currentFont, setCurrentFont] = useState(HAFS_FONT);
+  const [mobileSliderMode, setMobileSliderMode] = useState(null);
 
   function appendLetter(letter) {
     setStageText(stageText + letter);
@@ -145,6 +148,14 @@ export default function App() {
   function clearStage() {
     setStageText("");
     setSelectedLetterIndex(null);
+  }
+
+  function toggleChangeFont() {
+    if (currentFont === AMIRI_FONT) {
+      setCurrentFont(HAFS_FONT);
+    } else if (currentFont === HAFS_FONT) {
+      setCurrentFont(AMIRI_FONT);
+    }
   }
 
   let mainText = null;
@@ -203,18 +214,100 @@ export default function App() {
         margin={["unset", "unset", "unset", "0 auto"]}
         width={["unset", "unset", "unset", "1200px"]}
       >
-        <HStack py="10px" px="20px" display={["none", "none", "flex", "flex"]}>
-          <Tooltip label="Font family">
-            <Select
-              w="120px"
-              size="lg"
-              borderColor="gray.300"
-              value={currentFont}
-              onChange={(e) => setCurrentFont(e.target.value)}
+        <Flex
+          flex={1}
+          textAlign="center"
+          overflow="hidden"
+          height="inherit"
+          justifyContent="center"
+          alignItems="center"
+          position="relative"
+        >
+          {selectedLetterIndex !== null && (
+            <KeyboardBaris
+              onLetterClick={(char) => insertBaris(char)}
+              onClear={clearBaris}
+            />
+          )}
+          {mainText}
+        </Flex>
+
+        {/* ----- mobile topbar ----- */}
+        {mobileSliderMode === null && (
+          <HStack
+            py="10px"
+            px="20px"
+            display={["flex", "flex", "none", "none"]}
+            justifyContent="center"
+          >
+            <MobileTopButton onClick={toggleChangeFont}>
+              <Icon as={RxFontStyle} boxSize="5" />
+            </MobileTopButton>
+            <MobileTopButton
+              onClick={() => setMobileSliderMode(MOBILE_SLIDER_ZOOM)}
             >
-              <option value={HAFS_FONT}>Hafs</option>
-              <option value={AMIRI_FONT}>Amiri</option>
-            </Select>
+              <Icon as={CgZoomIn} boxSize="5" />
+            </MobileTopButton>
+            <MobileTopButton
+              onClick={() => setMobileSliderMode(MOBILE_SLIDER_SPACING)}
+            >
+              <Icon as={RxColumnSpacing} boxSize="5" />
+            </MobileTopButton>
+            <MobileTopButton onClick={() => setIsEnabledHover(!isEnabledHover)}>
+              <Icon as={isEnabledHover ? TbMouse : TbMouseOff} boxSize="5" />
+            </MobileTopButton>
+          </HStack>
+        )}
+
+        {mobileSliderMode === MOBILE_SLIDER_ZOOM && (
+          <HStack
+            py="10px"
+            px="20px"
+            display={["flex", "flex", "none", "none"]}
+            justifyContent="center"
+          >
+            <MobileTopButton onClick={() => setMobileSliderMode(null)}>
+              <Icon as={RxArrowLeft} boxSize="6" />
+            </MobileTopButton>
+            <SliderZoom
+              onChange={(value) => {
+                let emValue = percentageToEm(value) + "em";
+                setStageTextSize(emValue);
+              }}
+            />
+          </HStack>
+        )}
+
+        {mobileSliderMode === MOBILE_SLIDER_SPACING && (
+          <HStack
+            py="10px"
+            px="20px"
+            display={["flex", "flex", "none", "none"]}
+            justifyContent="center"
+          >
+            <MobileTopButton onClick={() => setMobileSliderMode(null)}>
+              <Icon as={RxArrowLeft} boxSize="6" />
+            </MobileTopButton>
+            <SliderSpacing
+              value={spacingValue}
+              onChange={(value) => {
+                setSpacingValue(value);
+                setTextSpacing(letterSpacingMap[value]);
+              }}
+              onClickReset={() => {
+                setTextSpacing("normal");
+                setSpacingValue(40);
+              }}
+            />
+          </HStack>
+        )}
+
+        {/* ----- desktop topbar ----- */}
+        <HStack py="10px" px="20px" display={["none", "none", "flex", "flex"]}>
+          <Tooltip label="Change font">
+            <Button size="lg" fontSize="1.5em" onClick={toggleChangeFont}>
+              <Icon as={RxFontStyle} />
+            </Button>
           </Tooltip>
           <SliderZoom
             onChange={(value) => {
@@ -256,24 +349,6 @@ export default function App() {
             </Tooltip>
           )}
         </HStack>
-
-        <Flex
-          flex={1}
-          textAlign="center"
-          overflow="hidden"
-          height="inherit"
-          justifyContent="center"
-          alignItems="center"
-          position="relative"
-        >
-          {selectedLetterIndex !== null && (
-            <KeyboardBaris
-              onLetterClick={(char) => insertBaris(char)}
-              onClear={clearBaris}
-            />
-          )}
-          {mainText}
-        </Flex>
 
         <Flex p="20px" flexDirection="column">
           <Grid
@@ -329,7 +404,13 @@ export default function App() {
               />
             ))}
           </Grid>
-          <Text fontSize="0.8em" pt="10px" color="gray.400" textAlign="right">
+          <Text
+            fontSize="0.8em"
+            pt="10px"
+            color="gray.400"
+            textAlign="right"
+            userSelect="none"
+          >
             Dicipta oleh mansarip (
             <Link target="_blank" href="https://github.com/mansarip/pisahkata">
               Github
@@ -490,7 +571,7 @@ function SliderSpacing({ value, onChange, onClickReset }) {
         isReversed
         value={value}
         step={20}
-        minW="200"
+        minW={[120, 120, 200, 200]}
         onChange={(val) => onChange(val)}
       >
         <SliderTrack w="8px" borderRadius="base" bg="gray.200">
@@ -505,9 +586,23 @@ function SliderSpacing({ value, onChange, onClickReset }) {
       </Slider>
       <Tooltip label="Reset spacing">
         <Button size="lg" fontSize="1.5em" onClick={onClickReset}>
-          <Icon as={RxReset} />
+          <Icon as={IoMdRefresh} />
         </Button>
       </Tooltip>
     </HStack>
+  );
+}
+
+function MobileTopButton({ children, onClick }) {
+  return (
+    <Button
+      onClick={onClick}
+      boxShadow="base"
+      border="1px solid"
+      borderColor="gray.300"
+      size="sm"
+    >
+      {children}
+    </Button>
   );
 }
