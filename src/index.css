@@ -6,31 +6,15 @@
 
 @font-face {
   font-family: "Amiri";
-  src: url("/Amiri-Bold.woff2") format("woff2");
-  font-weight: bold;
+  src: url("/Amiri-Regular.woff2") format("woff2");
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Amiri";
-  src: url("/Amiri-Italic.woff2") format("woff2");
-  font-weight: normal;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Amiri";
-  src: url("/Amiri-BoldItalic.woff2") format("woff2");
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Amiri";
-  src: url("/Amiri-Regular.woff2") format("woff2");
+  font-family: "Jawi";
+  src: url("/JawiUthmanTaha.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

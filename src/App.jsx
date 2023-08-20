@@ -15,7 +15,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CgZoomIn, CgZoomOut } from "react-icons/cg";
 import { LuSpace } from "react-icons/lu";
 import { BsBackspaceReverse } from "react-icons/bs";
@@ -34,7 +34,9 @@ const FONT_SIZE_SYMBOL_KEYBOARD = ["1.4em", "1.4em", "2.0em", "2.0em"];
 const MOBILE_SLIDER_ZOOM = "zoom";
 const MOBILE_SLIDER_SPACING = "spacing";
 
-const letters = [
+const lettersJawi = ["چ", "ڠ", "ڤ", "ۏ", "ڽ"];
+
+const lettersAll = [
   "ا",
   "ب",
   "ت",
@@ -42,6 +44,7 @@ const letters = [
   "ج",
   "ح",
   "خ",
+  "چ",
   "د",
   "ذ",
   "ر",
@@ -54,18 +57,24 @@ const letters = [
   "ظ",
   "ع",
   "غ",
+  "ڠ",
   "ف",
+  "ڤ",
   "ق",
   "ك",
   "ل",
   "م",
   "ن",
   "و",
+  "ۏ",
   "ه",
   "ء",
   "ي",
+  "ڽ",
   "ة",
 ];
+
+const letters = lettersAll.filter((char) => !lettersJawi.includes(char));
 
 const baris = ["َ", "ِ", "ُ", "ً", "ٍ", "ٌ", "ْ", "ّ"];
 const extraLetters = ["ى", "ئ", "أ", "إ", "ؤ", "آ", "ٱ", "ـٰ"];
@@ -97,6 +106,7 @@ export default function App() {
   const [isEnabledHover, setIsEnabledHover] = useState(true);
   const [currentFont, setCurrentFont] = useState(HAFS_FONT);
   const [mobileSliderMode, setMobileSliderMode] = useState(null);
+  const [isJawiMode, setIsJawiMode] = useState(false);
 
   function appendLetter(letter) {
     setStageText(stageText + letter);
@@ -158,6 +168,18 @@ export default function App() {
     }
   }
 
+  function toggleJawiArab() {
+    setIsJawiMode(!isJawiMode);
+  }
+
+  useEffect(() => {
+    if (isJawiMode) {
+      setCurrentFont(AMIRI_FONT);
+    }
+    setStageText("");
+  }, [isJawiMode]);
+
+  let letterList = isJawiMode ? lettersAll : letters;
   let mainText = null;
 
   if (stageText === "") {
@@ -240,9 +262,14 @@ export default function App() {
             display={["flex", "flex", "none", "none"]}
             justifyContent="center"
           >
-            <MobileTopButton onClick={toggleChangeFont}>
-              <Icon as={RxFontStyle} boxSize="5" />
+            <MobileTopButton onClick={toggleJawiArab}>
+              {isJawiMode ? "Arab" : "Jawi"}
             </MobileTopButton>
+            {!isJawiMode && (
+              <MobileTopButton onClick={toggleChangeFont}>
+                <Icon as={RxFontStyle} boxSize="5" />
+              </MobileTopButton>
+            )}
             <MobileTopButton
               onClick={() => setMobileSliderMode(MOBILE_SLIDER_ZOOM)}
             >
@@ -304,11 +331,16 @@ export default function App() {
 
         {/* ----- desktop topbar ----- */}
         <HStack py="10px" px="20px" display={["none", "none", "flex", "flex"]}>
-          <Tooltip label="Change font">
-            <Button size="lg" fontSize="1.5em" onClick={toggleChangeFont}>
-              <Icon as={RxFontStyle} />
-            </Button>
-          </Tooltip>
+          <Button size="lg" fontSize="1.5em" onClick={toggleJawiArab}>
+            {isJawiMode ? "Arab" : "Jawi"}
+          </Button>
+          {!isJawiMode && (
+            <Tooltip label={"Change font"}>
+              <Button size="lg" fontSize="1.5em" onClick={toggleChangeFont}>
+                <Icon as={RxFontStyle} />
+              </Button>
+            </Tooltip>
+          )}
           <SliderZoom
             onChange={(value) => {
               let emValue = percentageToEm(value) + "em";
@@ -353,16 +385,16 @@ export default function App() {
         <Flex p="20px" flexDirection="column">
           <Grid
             gridTemplateColumns={[
-              "repeat(10, 1fr)",
-              "repeat(10, 1fr)",
-              "repeat(15, 1fr)",
-              "repeat(15, 1fr)",
+              isJawiMode ? "repeat(12, 1fr)" : "repeat(10, 1fr)",
+              isJawiMode ? "repeat(12, 1fr)" : "repeat(10, 1fr)",
+              isJawiMode ? "repeat(18, 1fr)" : "repeat(15, 1fr)",
+              isJawiMode ? "repeat(18, 1fr)" : "repeat(15, 1fr)",
             ]}
             columnGap="5px"
             rowGap="5px"
             dir="rtl"
           >
-            {letters.map((letter) => (
+            {letterList.map((letter) => (
               <KeyboardButton
                 key={letter}
                 letter={letter}
