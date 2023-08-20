@@ -1,4 +1,4 @@
-# Pisah Kata
+# Pisah Kata (HurufArab.com)
 
 <img width="800" alt="image" src="https://github.com/mansarip/pisahkata/assets/7287065/4c852435-4258-4946-9b2a-fc528efb6c8b">
 
