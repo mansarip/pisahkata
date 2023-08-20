@@ -34,7 +34,7 @@ const FONT_SIZE_SYMBOL_KEYBOARD = ["1.4em", "1.4em", "2.0em", "2.0em"];
 const MOBILE_SLIDER_ZOOM = "zoom";
 const MOBILE_SLIDER_SPACING = "spacing";
 
-const lettersJawi = ["چ", "ڠ", "ڤ", "ۏ", "ڽ"];
+const lettersJawi = ["چ", "ڠ", "ڤ", "ݢ", "ۏ", "ڽ"];
 
 const lettersAll = [
   "ا",
@@ -62,6 +62,7 @@ const lettersAll = [
   "ڤ",
   "ق",
   "ك",
+  "ݢ",
   "ل",
   "م",
   "ن",
