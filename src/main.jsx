@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { ChakraProvider } from "@chakra-ui/react";
 import "./index.css";
 import { registerSW } from "virtual:pwa-register";
+import { Analytics } from "@vercel/analytics/react";
 
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -19,6 +20,7 @@ ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <ChakraProvider>
       <App />
+      <Analytics />
     </ChakraProvider>
   </React.StrictMode>
 );
